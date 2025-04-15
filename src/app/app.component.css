@@ -1,0 +1,10 @@
+.body-container {
+      margin-left: 240px;
+      padding:0 0 0 20px;
+      transition: margin-left 0.6s;
+    }
+    
+    .body-collapsed {
+      margin-left: 35px;
+    }
+    
