@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Modifier la catégorie</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="categoryForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nom de la catégorie</mat-label>
+      <input matInput formControlName="categoryName">
+      
+      <mat-error *ngIf="categoryForm.get('categoryName')?.hasError('required')">
+        Le nom de la catégorie est requis
+      </mat-error>
+      <mat-error *ngIf="categoryForm.get('categoryName')?.hasError('maxlength')">
+        Le nom ne doit pas dépasser 100 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="errorMessage" class="mat-error mt-2">
+      {{ errorMessage }}
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isUpdating">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="categoryForm.invalid || isUpdating">
+    <span *ngIf="!isUpdating">Mettre à jour</span>
+    <span *ngIf="isUpdating">
+      <mat-spinner diameter="20"></mat-spinner>
+    </span>
+  </button>
+</mat-dialog-actions>

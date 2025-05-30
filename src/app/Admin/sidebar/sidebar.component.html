@@ -1,0 +1,17 @@
+<div class="sidebar" [class.collapsed]="collapsed">
+      <div class="top-section">
+            <span *ngIf="!collapsed" class="logo-text"><img src="assets/logo.png" alt=""></span>
+            <button class="toggle-btn" (click)="toggleSidebar()">
+              <i class="fal" [class.fa-bars]="collapsed" [class.fa-times]="!collapsed"></i>
+            </button>
+      </div>
+    
+      <ul class="nav-items">
+        <li><a routerLink="/dashboard"><span *ngIf="!collapsed">Tableau de bord</span></a></li>
+        
+        <li><a routerLink="/formation"><span *ngIf="!collapsed">Formations</span></a></li>
+        <li><a routerLink="/utulisateur"><span *ngIf="!collapsed">Utulisateurs</span></a></li>
+        <li><a routerLink="/lesson"><span *ngIf="!collapsed">Leçons</span></a></li>
+      </ul>
+    </div>
+    

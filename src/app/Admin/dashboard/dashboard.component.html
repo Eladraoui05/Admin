@@ -1,0 +1,34 @@
+<div class="dashboard-container">
+  <div class="stats-container">
+    <div class="card" *ngFor="let card of statCards">
+      <div class="card-content">
+        <div class="text-content">
+          <p class="label">{{ card.label }}</p>
+          <h2 class="value">{{ card.value }}</h2>
+        </div>
+        <div class="icon" [ngStyle]="{ 'background-color': card.bgColor }">
+          <i class="{{ card.icon }}"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="growth-chart">
+    <h3>graphique des Utilisateur</h3>
+    <div class="chart-wrapper">
+      <div class="y-axis">
+        <span *ngFor="let tick of yAxisTicks">{{ tick }}</span>
+      </div>
+      <div class="chart-container">
+        <div class="chart-bars">
+          <div class="bar-container" *ngFor="let month of userGrowth; let i = index">
+            <div class="bar" [ngStyle]="{ 'height': calculateBarHeight(month.value) + '%' }">
+              <div class="tooltip">{{ month.value }}</div>
+            </div>
+            <span class="month-label">{{ month.month }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

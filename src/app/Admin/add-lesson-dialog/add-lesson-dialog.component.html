@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Ajouter une nouvelle leçon</h2>
+<mat-dialog-content>
+  <form [formGroup]="lessonForm" class="lesson-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre" required>
+      <mat-error *ngIf="lessonForm.get('titre')?.hasError('required')">
+        Le titre est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>URL de la vidéo</mat-label>
+      <input matInput formControlName="URL" required>
+      <mat-hint>URL YouTube, Vimeo ou lien direct</mat-hint>
+      <mat-error *ngIf="lessonForm.get('URL')?.hasError('required')">
+        L'URL est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Durée (HH:MM:SS)</mat-label>
+      <input matInput formControlName="duration" required placeholder="00:15:30">
+      <mat-error *ngIf="lessonForm.get('duration')?.hasError('required')">
+        La durée est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cours associé</mat-label>
+      <mat-select formControlName="courseId" required>
+        <mat-option *ngFor="let course of courses" [value]="course.id">
+          {{ course.courseName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="lessonForm.get('courseId')?.hasError('required')">
+        Le cours est obligatoire
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" 
+          (click)="onSubmit()" 
+          [disabled]="!lessonForm.valid">
+    Ajouter
+  </button>
+</mat-dialog-actions>

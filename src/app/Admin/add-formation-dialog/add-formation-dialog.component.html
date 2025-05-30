@@ -1,0 +1,118 @@
+<div class="dialog-header">
+  <h2>Ajouter Un formation</h2>
+  <button mat-icon-button class="close-button" (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="courseForm" class="course-form" (ngSubmit)="onSubmit()">
+    <!-- Course Name -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nom de formation:</mat-label>
+      <input matInput formControlName="courseName" placeholder="Ex: Advanced Angular" required>
+      <mat-icon matSuffix>title</mat-icon>
+      <mat-error *ngIf="courseForm.get('courseName')?.hasError('required')">
+        Le nom de la formation est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="courseDescription" 
+                placeholder="Description détaillée de la formation"
+                rows="4" required></textarea>
+      <mat-error *ngIf="courseForm.get('courseDescription')?.hasError('required')">
+        La description est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Level -->
+    <mat-form-field appearance="outline">
+      <mat-label>Niveau</mat-label>
+      <mat-select formControlName="levelId" required>
+        <mat-option *ngFor="let level of levels" [value]="level.id">
+          {{ level.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="courseForm.get('levelId')?.hasError('required')">
+        Le niveau est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Category -->
+    <mat-form-field appearance="outline">
+      <mat-label>Catégorie</mat-label>
+      <mat-select formControlName="categoryId" required>
+        <mat-option *ngFor="let category of categories" [value]="category.id">
+          {{ category.categoryName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="courseForm.get('categoryId')?.hasError('required')">
+        La catégorie est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Formateur</mat-label>
+      <mat-select formControlName="userId" required>
+        <mat-option *ngIf="isLoadingInstructors" disabled>
+          Chargement des formateurs...
+        </mat-option>
+        <mat-option *ngIf="!isLoadingInstructors && instructors.length === 0" disabled>
+          Aucun formateur disponible
+        </mat-option>
+        <mat-option *ngFor="let instructor of instructors" [value]="instructor.user.id">
+          {{ getInstructorDisplayName(instructor) }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="courseForm.get('userId')?.hasError('required')">
+        Le formateur est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Image Upload -->
+    <div class="file-upload-section">
+      <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept="image/*" hidden>
+      <label for="fileUpload" mat-raised-button class="upload-button">
+        <mat-icon>cloud_upload</mat-icon>
+        <span>Choisir une image</span>
+      </label>
+      
+      <div class="file-info">
+        <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        <span *ngIf="!selectedFile" class="file-placeholder">Aucun fichier sélectionné</span>
+      </div>
+    </div>
+
+    <!-- Image Preview -->
+    <div class="image-preview" *ngIf="previewUrl">
+      <img [src]="previewUrl" alt="Aperçu de l'image de la formation">
+    </div>
+
+    <!-- Duration -->
+    <mat-form-field appearance="outline">
+      <mat-label>Durée</mat-label>
+      <input matInput formControlName="duration" placeholder="Ex: 2h ou 3h30">
+      <mat-icon matSuffix>schedule</mat-icon>
+      <mat-error *ngIf="courseForm.get('duration')?.hasError('required')">
+        La durée est obligatoire
+      </mat-error>
+      <mat-error *ngIf="courseForm.get('duration')?.hasError('pattern')">
+        Format: 2h ou 2h30
+      </mat-error>
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="onCancel()">Annuler</button>
+      <button mat-raised-button 
+              color="primary" 
+              type="submit"
+              [disabled]="!courseForm.valid || isSubmitting">
+        <mat-icon>save</mat-icon>
+        {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

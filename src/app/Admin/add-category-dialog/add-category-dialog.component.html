@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Ajouter une nouvelle catégorie</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="categoryForm" class="category-form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nom de la catégorie</mat-label>
+      <input matInput formControlName="categoryName" required>
+      <mat-error *ngIf="categoryName?.hasError('required')">
+        Le nom de la catégorie est requis
+      </mat-error>
+      <mat-error *ngIf="categoryName?.hasError('minlength')">
+        Le nom doit contenir au moins 3 caractères
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSubmit()" 
+    [disabled]="categoryForm.invalid || isLoading"
+  >
+    <span *ngIf="!isLoading">Ajouter</span>
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+  </button>
+</mat-dialog-actions>

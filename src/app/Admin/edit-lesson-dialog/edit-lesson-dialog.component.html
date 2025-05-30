@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>Modifier la leçon</h2>
+<mat-dialog-content>
+  <form [formGroup]="lessonForm" class="lesson-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Titre *</mat-label>
+      <input matInput formControlName="titre" required />
+      <mat-error *ngIf="lessonForm.get('titre')?.hasError('required')">
+        Le titre est obligatoire
+      </mat-error>
+      <mat-error *ngIf="lessonForm.get('titre')?.hasError('maxlength')">
+        Maximum 100 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+      <mat-hint align="end"
+        >{{ lessonForm.get("description")?.value?.length || 0 }}/500</mat-hint
+      >
+      <mat-error *ngIf="lessonForm.get('description')?.hasError('maxlength')">
+        Maximum 500 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>URL Vidéo *</mat-label>
+      <input matInput formControlName="URL" required />
+      <mat-hint
+        >URL YouTube, Vimeo ou lien direct (commençant par http:// ou
+        https://)</mat-hint
+      >
+      <mat-error *ngIf="lessonForm.get('URL')?.hasError('required')">
+        L'URL est obligatoire
+      </mat-error>
+      <mat-error *ngIf="lessonForm.get('URL')?.hasError('pattern')">
+        L'URL doit commencer par http:// ou https://
+      </mat-error>
+    </mat-form-field>
+
+    <!-- <mat-form-field appearance="outline">
+  <mat-label>Durée *</mat-label>
+  <input matInput formControlName="duration" required 
+         placeholder="HH:MM:SS" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+  <mat-error *ngIf="lessonForm.get('duration')?.hasError('required')">
+    La durée est obligatoire
+  </mat-error>
+  <mat-error *ngIf="lessonForm.get('duration')?.hasError('pattern')">
+    Format attendu : HH:MM:SS (ex: 01:30:00 pour 1h30)
+  </mat-error>
+</mat-form-field> -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>Heure *</mat-label>
+      <input
+        matInput
+        formControlName="duration"
+        required
+        placeholder="HH:MM"
+        pattern="^([01]\d|2[0-3]):([0-5]\d)$"
+      />
+      <mat-error *ngIf="lessonForm.get('duration')?.hasError('required')">
+        L'heure est obligatoire
+      </mat-error>
+      <mat-error *ngIf="lessonForm.get('duration')?.hasError('pattern')">
+        Format attendu : HH:MM (ex : 13:45)
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cours associé *</mat-label>
+      <mat-select formControlName="courseId" required>
+        <mat-option *ngFor="let course of courses" [value]="course.id">
+          {{ course.courseName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="lessonForm.get('courseId')?.hasError('required')">
+        Le cours est obligatoire </mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+  >
+    <span *ngIf="!isSaving">Enregistrer</span>
+    <span *ngIf="isSaving">Enregistrement...</span>
+  </button>
+</mat-dialog-actions>

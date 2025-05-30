@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>Modifier la formation</h2>
+<mat-dialog-content>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Nom de la formation</mat-label>
+        <input matInput formControlName="courseName" required>
+        <mat-error *ngIf="editForm.get('courseName')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="courseDescription" rows="4" required></textarea>
+        <mat-error *ngIf="editForm.get('courseDescription')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="categoryId" required>
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{category.categoryName}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editForm.get('categoryId')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Niveau</mat-label>
+        <mat-select formControlName="levelId" required>
+          <mat-option *ngFor="let level of levels" [value]="level.id">
+            {{level.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editForm.get('levelId')?.hasError('required')">
+          Ce champ est obligatoire
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+     <mat-form-field appearance="outline" class="form-field">
+  <mat-label>Formateur</mat-label>
+  <mat-select formControlName="userId" required> <!-- Changé de instructorId à userId -->
+    <mat-option *ngFor="let instructor of instructors" [value]="instructor.user.id">
+      {{displayInstructor(instructor)}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="editForm.get('userId')?.hasError('required')">
+    Ce champ est obligatoire
+  </mat-error>
+</mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Durée</mat-label>
+        <input matInput formControlName="duration" placeholder="Ex: 2h30">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row image-upload">
+      <div class="image-preview">
+        <img [src]="previewUrl || 'assets/images/default-course.jpg'" alt="Aperçu de l'image">
+      </div>
+      <div class="upload-controls">
+        <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
+          <mat-icon>image</mat-icon> Changer l'image
+        </button>
+        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+        <div class="file-hint">Format recommandé : 16:9 (ex: 800x450px)</div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">Enregistrer</button>
+</mat-dialog-actions>

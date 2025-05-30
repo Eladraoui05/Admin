@@ -1,0 +1,130 @@
+<div class="container">
+    <div class="header-title">
+    <h2>Mes Formations</h2>
+    <button class="add-btn" (click)="openAddFormationDialog()">
+        <mat-icon>add</mat-icon> Ajouter une formation
+    </button>
+</div>
+    <div class="header-formation">
+        <div class="search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+            <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="filterCourses()"
+                placeholder="Rechercher une formation..."
+            />
+        </div>
+<div class="filters-container">
+    <mat-form-field appearance="outline" class="level-filter">
+        <mat-label>Filtrer par niveau</mat-label>
+        <mat-select [formControl]="levelFilter">
+            <mat-option [value]="null">Tous les niveaux</mat-option>
+            <mat-option *ngFor="let level of levels" [value]="level.name">
+                <div class="option-with-actions">
+                    <span>{{ level.name }}</span>
+                    <div class="option-actions">
+                        <button mat-icon-button 
+                                (click)="openEditLevelDialog(level, $event)"
+                                color="primary"
+                                matTooltip="Modifier le niveau">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button 
+                                (click)="deleteLevel(level, $event)"
+                                color="warn"
+                                matTooltip="Supprimer le niveau">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </mat-option>
+            <button mat-button class="add-button" (click)="openAddLevelDialog($event)">
+                <mat-icon>add</mat-icon> Ajouter un niveau
+            </button>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="category-filter">
+        <mat-label>Filtrer par catégorie</mat-label>
+        <mat-select [formControl]="categoryFilter">
+            <mat-option [value]="null">Toutes les catégories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category.categoryName">
+                <div class="category-option">
+                    <span>{{ category.categoryName }}</span>
+                    <div class="category-actions">
+                        <button mat-icon-button 
+                                (click)="openEditCategoryDialog(category, $event)"
+                                color="primary">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button 
+                                (click)="deleteCategory(category, $event)"
+                                color="warn">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </mat-option>
+            <button mat-button class="add-category-btn" (click)="openAddCategoryDialog($event)">
+                <mat-icon>add</mat-icon> Ajouter une catégorie
+            </button>
+        </mat-select>
+    </mat-form-field>
+    
+</div>
+        
+    </div>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && filteredCourses.length === 0" class="no-courses">
+        Aucun cours disponible pour le moment.
+    </div>
+
+    <div class="formations-grid">
+        <div class="formation-card" *ngFor="let course of filteredCourses">
+            <div class="image-container">
+                <img [src]="course.imageCourse || 'assets/images/default-course.jpg'" 
+                     [alt]="course.courseName" 
+                     class="formation-image">
+                <div class="duration-badge">{{course.duration || 'Non spécifiée'}}</div>
+            </div>
+            <div class="card-content">
+                <h3>{{ course.courseName }}</h3>
+                <p class="description">{{ course.courseDescription }}</p>
+                
+                <div class="course-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Catégorie:</span>
+                        <span class="meta-value">{{course.category}}</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Niveau:</span>
+                        <span class="meta-value">{{ course.level }}</span>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Formateur:</span>
+                    <span class="meta-value">
+                        {{ course.formateur}}
+                    </span>
+                </div>
+                <div class="card-actions">
+                    <button mat-icon-button color="primary" [matTooltip]="'Modifier'" (click)="openEditFormationDialog(course)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" 
+                            [matTooltip]="'Supprimer'"
+                            (click)="deleteCourse(course.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
